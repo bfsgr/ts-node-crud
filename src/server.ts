@@ -6,12 +6,23 @@ import StudentController from './controllers/student.controller';
 
 import eventHandler from './utils/event.handler';
 
-const app = new App({
-	host: 'localhost',
-	port: 5000,
-	controllers: [new StudentController()],
-	middleWares: [bodyParser.json(), bodyParser.urlencoded({ extended: true })],
-	handlers: eventHandler.init(),
-});
+class Server {
+	private app: App;
+	constructor() {
+		this.app = new App({
+			host: 'localhost',
+			port: 5000,
+			controllers: [new StudentController()],
+			middleWares: [bodyParser.json(), bodyParser.urlencoded({ extended: true })],
+			handlers: eventHandler.init(),
+		});
+	}
+	listen() {
+		this.app.listen();
+	}
+	express() {
+		return this.app.app;
+	}
+}
 
-app.listen();
+export default Server;
