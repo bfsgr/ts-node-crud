@@ -1,24 +1,24 @@
-import { Student } from '../entity/student.entity'
-import * as express from 'express'
-import { Request, Response } from 'express'
-import IControllerBase from 'interfaces/IControllerBase.interface'
-import { getManager } from 'typeorm'
+import { Student } from '../entity/student.entity';
+import * as express from 'express';
+import { Request, Response } from 'express';
+import IControllerBase from 'interfaces/IControllerBase.interface';
+import { getManager } from 'typeorm';
 
 class StudentController implements IControllerBase {
-    public path = '/'
-    public router = express.Router()
+	public path = '/';
+	public router = express.Router();
 
-    constructor() {
-        this.initRoutes()
-    }
+	constructor() {
+		this.initRoutes();
+	}
 
-    public initRoutes() {
-        this.router.get('/student', this.index)
-    }
+	public initRoutes() {
+		this.router.get('/student', this.index);
+	}
 
-    index = (req: Request, res: Response) => {
-        res.status(200).json({status: 200})
-    }
+	index = (req: Request, res: Response) => {
+		res.status(200).json({ status: 200 });
+	};
 }
 
-export default StudentController
+export default StudentController;
