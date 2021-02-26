@@ -27,13 +27,26 @@ class StudentController implements IControllerBase {
 	show = async () => {};
 
 	create = async (req: Request, res: Response) => {
-		// const manager = await getManager();
-
 		const data: Student = plainToClass(Student, req.body, { excludeExtraneousValues: true });
 
-		const erros = await validate(data);
+		const errors = await validate(data);
 
-		res.status(StatusCodes.OK).json({ status: StatusCodes.OK, errors: erros });
+		if (errors.length > 0) {
+			//TODO = filter validation errors
+			res.status(StatusCodes.BAD_REQUEST).json({ status: StatusCodes.BAD_REQUEST, errors: errors });
+		} else {
+			const manager = await getManager();
+
+			await manager
+				.save(data)
+				.then(() => {
+					res.status(StatusCodes.CREATED).json({ status: StatusCodes.CREATED });
+				})
+				.catch((e) => {
+					// todo = log error
+					throw Error('Internal Server Error, contact developer');
+				});
+		}
 	};
 
 	update = async () => {};

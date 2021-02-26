@@ -20,7 +20,7 @@ export class Student extends BaseEntity {
 	@Column()
 	@IsInt()
 	@Min(1900)
-	@Max(2021)
+	@Max(new Date().getFullYear())
 	@Expose()
 	year_of_admission: number;
 
