@@ -16,7 +16,7 @@ class StudentController implements IControllerBase {
 		this.router.get('/student', this.index);
 	}
 
-	index = (req: Request, res: Response) => {
+	index = async (req: Request, res: Response) => {
 		res.status(200).json({ status: 200 });
 	};
 }
