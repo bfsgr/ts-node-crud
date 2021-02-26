@@ -1,7 +1,7 @@
 import { Application } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import request from 'supertest';
-import { Connection, ConnectionOptionsReader, createConnection, getConnection } from 'typeorm';
+import { createConnection, getConnection } from 'typeorm';
 
 import Server from '../src/server';
 

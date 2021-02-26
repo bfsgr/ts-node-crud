@@ -1,6 +1,6 @@
 {
-	"name": "nodets-crud",
-	"version": "0.1.0",
+	"name": "ts-node-crud",
+	"version": "0.3.0",
 	"description": "A simple CRUD API in typescript",
 	"author": "bfsgr",
 	"license": "MIT",
