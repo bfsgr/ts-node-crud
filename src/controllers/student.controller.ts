@@ -1,6 +1,6 @@
 import { Student } from '../entity/student.entity';
 import * as express from 'express';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import IControllerBase from 'interfaces/IControllerBase.interface';
 import { EntityNotFoundError, getManager } from 'typeorm';
 import { StatusCodes } from 'http-status-codes';
@@ -21,7 +21,7 @@ class StudentController implements IControllerBase {
 		this.router.get('/student/:id', this.show);
 	}
 
-	index = async (req: Request, res: Response) => {
+	index = async (req: Request, res: Response, next: NextFunction) => {
 		const PAGE_SIZE = 4;
 		const pageNum = +req.query.p ? +req.query.p : 0;
 
@@ -37,11 +37,11 @@ class StudentController implements IControllerBase {
 				}
 			})
 			.catch((e) => {
-				throw Error('Internal Server Error, contact developer');
+				next('Internal Server Error, contact developer');
 			});
 	};
 
-	show = async (req: Request, res: Response) => {
+	show = async (req: Request, res: Response, next: NextFunction) => {
 		const studentId = +req.params.id ? +req.params.id : null;
 
 		if (!studentId) {
@@ -66,12 +66,12 @@ class StudentController implements IControllerBase {
 					}
 				})
 				.catch((e) => {
-					throw Error('Internal Server Error, contact developer');
+					next('Internal Server Error, contact developer');
 				});
 		}
 	};
 
-	create = async (req: Request, res: Response) => {
+	create = async (req: Request, res: Response, next: NextFunction) => {
 		const data: Student = plainToClass(Student, req.body, { excludeExtraneousValues: true });
 
 		const errors = await validate(data);
@@ -95,7 +95,7 @@ class StudentController implements IControllerBase {
 				})
 				.catch((e) => {
 					// TODO = log error to file
-					throw Error('Internal Server Error, contact developer');
+					next('Internal Server Error, contact developer');
 				});
 		}
 	};
