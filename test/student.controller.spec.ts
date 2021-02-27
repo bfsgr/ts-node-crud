@@ -26,15 +26,17 @@ beforeEach(async () => {
 	await Promise.all(entityDeletionPromises);
 });
 
-describe('index', () => {
-	it('should return 200', async (done) => {
+describe('create', () => {
+	it('should create student and return CREATED', async (done) => {
 		request(server)
-			.get('/student')
+			.post('/student')
+			.send({ first_name: 'Josh', last_name: 'Gold', year_of_admission: 2018 })
+			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
-			.expect(StatusCodes.OK)
+			.expect(StatusCodes.CREATED)
 			.end((err, res) => {
 				if (err) return done(err);
-				expect(res.body).toMatchObject({ status: StatusCodes.OK });
+				expect(res.body).toMatchObject({ status: StatusCodes.CREATED });
 				done();
 			});
 	});
