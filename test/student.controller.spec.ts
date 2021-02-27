@@ -1,3 +1,4 @@
+import { doesNotMatch } from 'assert';
 import { Application } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import request from 'supertest';
@@ -195,6 +196,92 @@ describe('create', () => {
 				if (err) return done(err);
 				expect(res.body).toMatchObject({
 					status: StatusCodes.BAD_REQUEST,
+				});
+				done();
+			});
+	});
+});
+
+describe('index', () => {
+	it('should return first 4 students', async (done) => {
+		request(server)
+			.get('/student')
+			.expect('Content-Type', /json/)
+			.expect(StatusCodes.OK)
+			.end((err, res) => {
+				if (err) return done(err);
+				expect(res.body).toMatchObject({
+					students: [
+						{
+							id: 1,
+							first_name: 'John',
+							last_name: 'Smith',
+							year_of_admission: 2011,
+						},
+						{
+							id: 2,
+							first_name: 'Luke',
+							last_name: 'Gold',
+							year_of_admission: 2021,
+						},
+						{
+							id: 3,
+							first_name: 'Tayler',
+							last_name: 'McSaint',
+							year_of_admission: 2017,
+						},
+						{
+							id: 4,
+							first_name: 'Adam',
+							last_name: 'Smith',
+							year_of_admission: 2015,
+						},
+					],
+				});
+				expect(res.body.students.length).toBe(4);
+				done();
+			});
+	});
+	it('should return NOT FOUND', async (done) => {
+		request(server)
+			.get('/student?p=15')
+			.expect('Content-Type', /json/)
+			.expect(StatusCodes.NOT_FOUND)
+			.end((err, res) => {
+				if (err) return done(err);
+				done();
+			});
+	});
+});
+
+describe('show', () => {
+	it('should return the first student', async (done) => {
+		request(server)
+			.get('/student/1')
+			.expect('Content-Type', /json/)
+			.expect(StatusCodes.OK)
+			.end((err, res) => {
+				if (err) return done(err);
+				expect(res.body).toMatchObject({
+					student: {
+						first_name: 'John',
+						last_name: 'Smith',
+						year_of_admission: 2011,
+					},
+				});
+				done();
+			});
+	});
+
+	it('should return NOT FOUND', async (done) => {
+		request(server)
+			.get('/student/200')
+			.expect('Content-Type', /json/)
+			.expect(StatusCodes.NOT_FOUND)
+			.end((err, res) => {
+				if (err) return done(err);
+				expect(res.body).toMatchObject({
+					status: StatusCodes.NOT_FOUND,
 				});
 				done();
 			});
