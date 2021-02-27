@@ -32,18 +32,24 @@ class StudentController implements IControllerBase {
 		const errors = await validate(data);
 
 		if (errors.length > 0) {
-			//TODO = filter validation errors
-			res.status(StatusCodes.BAD_REQUEST).json({ status: StatusCodes.BAD_REQUEST, errors: errors });
+			let formated: Record<string, any> = {};
+
+			errors.forEach((el) => {
+				formated[el.property] = Object.values(el.constraints).map((x) => {
+					return x.slice(el.property.length + 1);
+				});
+			});
+			res.status(StatusCodes.BAD_REQUEST).json({ status: StatusCodes.BAD_REQUEST, errors: formated });
 		} else {
 			const manager = await getManager();
 
-			await manager
+			manager
 				.save(data)
 				.then(() => {
 					res.status(StatusCodes.CREATED).json({ status: StatusCodes.CREATED });
 				})
 				.catch((e) => {
-					// todo = log error
+					// TODO = log error to file
 					throw Error('Internal Server Error, contact developer');
 				});
 		}

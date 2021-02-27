@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { IsInt, Length, Max, Min } from 'class-validator';
+import { IsInt, Length, Max, Min, IsDefined } from 'class-validator';
 import { Entity, BaseEntity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 
 @Entity()
@@ -9,11 +9,13 @@ export class Student extends BaseEntity {
 
 	@Column()
 	@Length(3, 50)
+	@IsDefined()
 	@Expose()
 	first_name: string;
 
 	@Column()
 	@Length(3, 255)
+	@IsDefined()
 	@Expose()
 	last_name: string;
 
@@ -21,16 +23,7 @@ export class Student extends BaseEntity {
 	@IsInt()
 	@Min(1900)
 	@Max(new Date().getFullYear())
+	@IsDefined()
 	@Expose()
 	year_of_admission: number;
-
-	errors: Array<object>;
-
-	@BeforeInsert()
-	validade() {
-		if (this.first_name) {
-		} else {
-			this.errors.push({ first_name: 'First name is required' });
-		}
-	}
 }
