@@ -341,3 +341,38 @@ describe('update', () => {
 			});
 	});
 });
+
+describe('delete', () => {
+	it('should delete student and return OK', async (done) => {
+		request(server)
+			.delete('/student/1')
+			.expect('Content-Type', /json/)
+			.expect(StatusCodes.OK)
+			.end((err, res) => {
+				if (err) return done(err);
+				done();
+			});
+	});
+
+	it('should return BAD REQUEST due to invalid id', async (done) => {
+		request(server)
+			.delete('/student/20g')
+			.expect('Content-Type', /json/)
+			.expect(StatusCodes.BAD_REQUEST)
+			.end((err, res) => {
+				if (err) return done(err);
+				done();
+			});
+	});
+
+	it('should return NOT FOUND', async (done) => {
+		request(server)
+			.delete('/student/20')
+			.expect('Content-Type', /json/)
+			.expect(StatusCodes.NOT_FOUND)
+			.end((err, res) => {
+				if (err) return done(err);
+				done();
+			});
+	});
+});

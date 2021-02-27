@@ -20,6 +20,7 @@ class StudentController implements IControllerBase {
 		this.router.post('/student', this.create);
 		this.router.get('/student/:id', this.show);
 		this.router.patch('/student/:id', this.update);
+		this.router.delete('/student/:id', this.delete);
 	}
 
 	index = async (req: Request, res: Response, next: NextFunction) => {
@@ -139,7 +140,38 @@ class StudentController implements IControllerBase {
 		}
 	};
 
-	delete = async (req: Request, res: Response, next: NextFunction) => {};
+	delete = async (req: Request, res: Response, next: NextFunction) => {
+		const studentId = +req.params.id ? +req.params.id : null;
+
+		if (!studentId) {
+			res.status(StatusCodes.BAD_REQUEST).json({
+				status: StatusCodes.BAD_REQUEST,
+				errors: {
+					parameters: ['invalid id'],
+				},
+			});
+			next();
+		}
+
+		const manager = getManager().getRepository('Student');
+
+		try {
+			let entity = (await manager.findOne({ where: { id: studentId } })) as Student;
+
+			if (!entity) {
+				res.status(StatusCodes.NOT_FOUND).json({
+					status: StatusCodes.NOT_FOUND,
+					errors: { student: ['entity not found'] },
+				});
+				next();
+			}
+
+			await manager.delete(entity);
+			res.status(StatusCodes.OK).json({ status: StatusCodes.OK });
+		} catch (e) {
+			next('Internal Server Error, contact developer');
+		}
+	};
 
 	private async student_validator(student: Student): Promise<Record<string, any>> {
 		const errors = await validate(student);
