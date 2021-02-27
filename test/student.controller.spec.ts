@@ -188,7 +188,7 @@ describe('create', () => {
 	it('should not create student with year of admission in the future', async (done) => {
 		request(server)
 			.post('/student')
-			.send({ first_name: 'Josh', last_name: 'Trayson', year_of_admission: 2022 })
+			.send({ first_name: 'Josh', last_name: 'Trayson', year_of_admission: new Date().getFullYear() + 1 })
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
 			.expect(StatusCodes.BAD_REQUEST)
@@ -283,6 +283,60 @@ describe('show', () => {
 				expect(res.body).toMatchObject({
 					status: StatusCodes.NOT_FOUND,
 				});
+				done();
+			});
+	});
+});
+
+describe('update', () => {
+	it('should update student and return OK', async (done) => {
+		request(server)
+			.patch('/student/1')
+			.send({ first_name: 'Luke', last_name: 'Trayson' })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(StatusCodes.OK)
+			.end((err, res) => {
+				if (err) return done(err);
+				done();
+			});
+	});
+
+	it('should not update student due to validation errors and return BAD REQUEST', async (done) => {
+		request(server)
+			.patch('/student/1')
+			.send({ first_name: '', last_name: 'Trayson', year_of_admission: 2018 })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(StatusCodes.BAD_REQUEST)
+			.end((err, res) => {
+				if (err) return done(err);
+				done();
+			});
+	});
+
+	it('should return BAD REQUEST due to invalid id', async (done) => {
+		request(server)
+			.patch('/student/1h')
+			.send({ first_name: 'Luke', last_name: 'Trayson', year_of_admission: 2018 })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(StatusCodes.BAD_REQUEST)
+			.end((err, res) => {
+				if (err) return done(err);
+				done();
+			});
+	});
+
+	it('should return NOT FOUND', async (done) => {
+		request(server)
+			.patch('/student/19')
+			.send({ first_name: 'Luke', last_name: 'Trayson', year_of_admission: 2018 })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(StatusCodes.NOT_FOUND)
+			.end((err, res) => {
+				if (err) return done(err);
 				done();
 			});
 	});
