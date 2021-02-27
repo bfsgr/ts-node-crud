@@ -84,7 +84,10 @@ class StudentController implements IControllerBase {
 			} else {
 				const manager = getManager();
 				await manager.save(data);
-				res.status(StatusCodes.CREATED).json({ status: StatusCodes.CREATED });
+
+				res.set('Location', `${process.env.HOST}/student/${data.id}`)
+					.status(StatusCodes.CREATED)
+					.json({ status: StatusCodes.CREATED });
 			}
 		} catch (e) {
 			next('Internal Server Error, contact developer');
