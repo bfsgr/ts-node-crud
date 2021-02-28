@@ -11,6 +11,7 @@ Made with Typescript, Express and TypeORM
 -   [x] Show Student based on id
 -   [x] Update Student
 -   [x] Delete Student
+-   [x] Model validations
 
 # The student model
 
