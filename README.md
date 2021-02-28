@@ -31,6 +31,11 @@ First install the dependencies
 npm i
 ```
 
+Run migrations
+```bash
+npx ts-node ./node_modules/typeorm/cli.js migration:run
+```
+
 Then run the dev server
 
 ```bash
