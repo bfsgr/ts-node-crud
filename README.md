@@ -47,3 +47,7 @@ You can run the tests using (using Jest)
 ```bash
 npm run test
 ```
+# License
+
+- BSD-3-Clause
+
