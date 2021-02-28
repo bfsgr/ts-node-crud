@@ -11,6 +11,7 @@ Made with Typescript, Express and TypeORM
 -   [x] Show Student based on id
 -   [x] Update Student
 -   [x] Delete Student
+-   [x] Model validations
 
 # The student model
 
@@ -30,6 +31,11 @@ First install the dependencies
 npm i
 ```
 
+Run migrations
+```bash
+npx ts-node ./node_modules/typeorm/cli.js migration:run
+```
+
 Then run the dev server
 
 ```bash
@@ -47,3 +53,7 @@ You can run the tests using (using Jest)
 ```bash
 npm run test
 ```
+# License
+
+- BSD-3-Clause
+
